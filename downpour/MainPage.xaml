@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="downpour.MainPage" Shell.NavBarIsVisible="False">
+
+    <Grid ColumnDefinitions="2*,*" RowDefinitions="50,*" Padding="5,0" Margin="0">
+        <StackLayout Grid.ColumnSpan="2" Grid.Row="0" VerticalOptions="Center">
+            <Label Text="KATOWICE, POLAND" FontSize="30" FontFamily="LiteOn" HorizontalOptions="Center"></Label>
+        </StackLayout>
+        <StackLayout Grid.Column="0" Grid.Row="1" HorizontalOptions="Start">
+            <Label Text="15" FontSize="300" FontFamily="LiteOnBlack"></Label>
+        </StackLayout>
+        <StackLayout Grid.Column="1" Grid.Row="1" Margin="0,80,0,0">
+            <Image Source="Resources/Images/weather_icons/sun.png" WidthRequest="130" Aspect="Fill" HorizontalOptions="Center"></Image>
+            <Label Text="24.03.2023" FontSize="23" FontFamily="LiteOnMedium" HorizontalOptions="Center" Margin="0,20,0,0"></Label>
+            <Label Text="WEDNESDAY" FontSize="20" FontFamily="LiteOnMedium" HorizontalOptions="Center"></Label>
+        </StackLayout>
+
+
+
+    </Grid>
+
+</ContentPage>
