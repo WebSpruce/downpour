@@ -1,12 +1,15 @@
-﻿namespace downpour;
+﻿using downpour.ViewModels;
+
+namespace downpour;
 
 public partial class MainPage : ContentPage
 {
-	int count = 0;
-
+	public static MainPage instance;
 	public MainPage()
 	{
 		InitializeComponent();
+		instance = this;
+		BindingContext = new MainViewModel();
 	}
 
 }

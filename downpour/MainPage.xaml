@@ -3,19 +3,38 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="downpour.MainPage" Shell.NavBarIsVisible="False">
 
-    <Grid ColumnDefinitions="2*,*" RowDefinitions="50,*" Padding="5,0" Margin="0">
+    <Grid ColumnDefinitions="2*,*" RowDefinitions="50,*,*" Padding="5,0" Margin="0">
         <StackLayout Grid.ColumnSpan="2" Grid.Row="0" VerticalOptions="Center">
-            <Label Text="KATOWICE, POLAND" FontSize="30" FontFamily="LiteOn" HorizontalOptions="Center"></Label>
+            <Label Text="{Binding CurrentCityName}" FontSize="30" FontFamily="LiteOn" HorizontalOptions="Center"></Label>
         </StackLayout>
         <StackLayout Grid.Column="0" Grid.Row="1" HorizontalOptions="Start">
-            <Label Text="15" FontSize="300" FontFamily="LiteOnBlack"></Label>
+            <Label Text="{Binding CurrentTemperature}" FontSize="290" FontFamily="LiteOnBlack"></Label>
+            <Label Text="°" FontSize="170" FontFamily="LiteOnBlack" HorizontalOptions="End" Margin="0,-270,-30,50"></Label>
+            <Label Text="{Binding Humidity}" FontSize="17" FontFamily="LiteOn"></Label>
+            <Label Text="{Binding Wind}" FontSize="17" FontFamily="LiteOn"></Label>
+            <Label Text="{Binding HPA}" FontSize="17" FontFamily="LiteOn"></Label>
         </StackLayout>
         <StackLayout Grid.Column="1" Grid.Row="1" Margin="0,80,0,0">
-            <Image Source="Resources/Images/weather_icons/sun.png" WidthRequest="130" Aspect="Fill" HorizontalOptions="Center"></Image>
-            <Label Text="24.03.2023" FontSize="23" FontFamily="LiteOnMedium" HorizontalOptions="Center" Margin="0,20,0,0"></Label>
-            <Label Text="WEDNESDAY" FontSize="20" FontFamily="LiteOnMedium" HorizontalOptions="Center"></Label>
+            <Image Source="Resources/Images/weather_icons/sun.png" WidthRequest="100" Aspect="Fill" HorizontalOptions="Center"></Image>
+            <Label Text="{Binding CurrentDate}" FontSize="23" FontFamily="LiteOnMedium" HorizontalOptions="Center" Margin="0,20,0,0"></Label>
+            <Label Text="{Binding DayName}" FontSize="23" FontFamily="LiteOnMedium" HorizontalOptions="Center"></Label>
         </StackLayout>
+        
+        <!--<StackLayout Grid.ColumnSpan="2" Grid.Row="2" Padding="5">
+            <Label Text="Forecast for today" FontSize="20" FontFamily="LiteOnMedium" Margin="0,10,0,0"></Label>
+            <Frame Padding="5">
+                <ScrollView Orientation="Horizontal" HeightRequest="110">
 
+                </ScrollView>
+            </Frame>
+            
+            <Label Text="Forecast for next days" FontSize="20" FontFamily="LiteOnMedium" Margin="0,10,0,0"></Label>
+            <Frame Padding="5">
+                <ScrollView Orientation="Horizontal" HeightRequest="110">
+
+                </ScrollView>
+            </Frame>
+        </StackLayout>-->
 
 
     </Grid>

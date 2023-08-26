@@ -20,7 +20,7 @@
     </Style>
 
     <Style TargetType="Border">
-        <Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray500}}" />
+        <Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource NewGray0}, Dark={StaticResource DcGray0}}" />
         <Setter Property="StrokeShape" Value="Rectangle"/>
         <Setter Property="StrokeThickness" Value="1"/>
     </Style>
@@ -30,8 +30,8 @@
     </Style>
 
     <Style TargetType="Button">
-        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Primary}}" />
-        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource NewGray0}, Dark={StaticResource DcLight0}}" />
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource NewLight1}, Dark={StaticResource DcGray0}}" />
         <Setter Property="FontFamily" Value="OpenSansRegular"/>
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="CornerRadius" Value="8"/>
@@ -138,8 +138,9 @@
 
     <Style TargetType="Frame">
         <Setter Property="HasShadow" Value="False" />
-        <Setter Property="BorderColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray950}}" />
+        <Setter Property="BorderColor" Value="{AppThemeBinding Light={StaticResource NewGray0}, Dark={StaticResource DcGray0}}" />
         <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="Background" Value="{AppThemeBinding Light={StaticResource NewLight0}, Dark={StaticResource DcGray1}}" />
     </Style>
 
     <Style TargetType="ImageButton">
