@@ -58,6 +58,8 @@
 	  <None Remove="Resources\Fonts\Liteon-Medium.otf" />
 	  <None Remove="Resources\Fonts\Liteon-Thin.otf" />
 	  <None Remove="Resources\Fonts\Liteon.otf" />
+	  <None Remove="Resources\Images\location.png" />
+	  <None Remove="Resources\Images\plus.png" />
 	  <None Remove="Resources\Images\sun.png" />
 	  <None Remove="Resources\Images\weather_icons\cloud.png" />
 	  <None Remove="Resources\Images\weather_icons\cloudy-day.png" />

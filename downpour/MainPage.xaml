@@ -4,8 +4,13 @@
              x:Class="downpour.MainPage" Shell.NavBarIsVisible="False">
 
     <Grid ColumnDefinitions="2*,*" RowDefinitions="50,*,*" Padding="5,0" Margin="0">
-        <StackLayout Grid.ColumnSpan="2" Grid.Row="0" VerticalOptions="Center">
-            <Label Text="{Binding CurrentCityName}" FontSize="30" FontFamily="LiteOn" HorizontalOptions="Center"></Label>
+        <StackLayout Orientation="Horizontal" Grid.ColumnSpan="2" Grid.Row="0" VerticalOptions="Center">
+            <Image Source="Resources/Images/plus.png" WidthRequest="30" HeightRequest="30" Aspect="Fill" Margin="10">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding AddCityIconCommand}"></TapGestureRecognizer>
+                </Image.GestureRecognizers>
+            </Image>
+            <Label Text="{Binding CurrentCityName}" FontSize="30" FontFamily="LiteOn" VerticalOptions="Center"></Label>
         </StackLayout>
         <StackLayout Grid.Column="0" Grid.Row="1" HorizontalOptions="Start">
             <Label Text="{Binding CurrentTemperature}" FontSize="260" FontFamily="LiteOnBlack"></Label>

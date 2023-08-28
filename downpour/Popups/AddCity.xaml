@@ -7,6 +7,11 @@
         <StackLayout>
             <Entry Text="{Binding EntryCity}" FontSize="20" FontFamily="LiteOnMedium" HorizontalTextAlignment="Center"></Entry>
             <Button Text="ADD CITY" Command="{Binding AddCityCommand}" FontSize="20" FontFamily="LiteOnBold"></Button>
+            <Image Source="Resources/Images/location.png" WidthRequest="30" HeightRequest="30" Aspect="Fill" HorizontalOptions="Center" Margin="0,10,0,0">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding AddCityIconCommand}"></TapGestureRecognizer>
+                </Image.GestureRecognizers>
+            </Image>
         </StackLayout>
     </Frame>
     

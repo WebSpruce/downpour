@@ -3,6 +3,7 @@ using downpour.Popups;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
 using Weather.NET;
 using Weather.NET.Enums;
 using Weather.NET.Models.WeatherModel;
@@ -210,10 +211,13 @@ namespace downpour.ViewModels
 
         public List<string> favoriteCities = new List<string>();
 
+        public ICommand AddCityIconCommand { get; private set; }
+
         public static MainViewModel instance;
         public MainViewModel()
         {
             instance = this;
+            AddCityIconCommand = new Command(()=> MainPage.instance.ShowPopup(new AddCity()));
             try
             {
                 WeatherAPIConnection();
@@ -240,35 +244,52 @@ namespace downpour.ViewModels
                 Trace.WriteLine($"API connection error: {ex}");
             }
         }
-        public async void GetCurrentWeather(List<string> favCities)
+        public async void GetCurrentWeather(string favCities)
         {
             try
             {
-                WeatherModel currentWeather = await weatherClient.GetCurrentWeatherAsync(favCities[0], Measurement.Metric);
-
-                CurrentCityName = currentWeather.CityName;
-                CurrentTemperature = ((int)currentWeather.Main.Temperature).ToString();
-                MinTemperature = ((int)currentWeather.Main.TemperatureMin).ToString();
-                MaxTemperature = ((int)currentWeather.Main.TemperatureMax).ToString();
-                Humidity = $"Humidity: {(int)currentWeather.Main.HumidityPercentage}%";
-                Wind = $"Wind: {currentWeather.Wind.Speed.ToString("#.#")}m/s";
-                HPA = $"{currentWeather.Main.AtmosphericPressure}hPa";
-                CurrentDate = $"{currentWeather.AnalysisDate.Day}/{currentWeather.AnalysisDate.Month}/{currentWeather.AnalysisDate.Year}";
-                DayName = $"{currentWeather.AnalysisDate.DayOfWeek}";
-                Trace.WriteLine($"icon: {currentWeather.Weather[0].Title} - {GetWeatherIcon(currentWeather.Weather[0].Title)}");
-                CurrentWeatherImage = GetWeatherIcon(currentWeather.Weather[0].Title);
-                //rain
+                WeatherModel currentWeather = await weatherClient.GetCurrentWeatherAsync(favCities, Measurement.Metric);
+                weatherInformation(currentWeather);
             }
             catch(Exception ex)
             {
                 Trace.WriteLine($"get current weather error: {ex}");
+                MainPage.instance.DisplayAlert("Error",$"Current Weather error.", "OK");
             }
         }
-        public async void GetForecastToday(List<string> favCities)
+        public async void GetCurrentWeather(double[] latitudeAndLongitude)
         {
             try
             {
-                List<WeatherModel> forecastsForCity = await weatherClient.GetForecastAsync(favCities[0], 8, Measurement.Metric, Language.English);
+                Trace.WriteLine($"location: {latitudeAndLongitude[0]} - {latitudeAndLongitude[1]}");
+                WeatherModel currentWeather = await weatherClient.GetCurrentWeatherAsync(latitudeAndLongitude[0], latitudeAndLongitude[1], Measurement.Metric);
+                weatherInformation(currentWeather);
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine($"get current weather location error: {ex}");
+                MainPage.instance.DisplayAlert("Error", $"Current Weather location error.", "OK");
+            }
+        }
+        private void weatherInformation(WeatherModel currentWeather)
+        {
+            CurrentCityName = currentWeather.CityName;
+            CurrentTemperature = ((int)currentWeather.Main.Temperature).ToString();
+            MinTemperature = ((int)currentWeather.Main.TemperatureMin).ToString();
+            MaxTemperature = ((int)currentWeather.Main.TemperatureMax).ToString();
+            Humidity = $"Humidity: {(int)currentWeather.Main.HumidityPercentage}%";
+            Wind = $"Wind: {currentWeather.Wind.Speed.ToString("#.#")}m/s";
+            HPA = $"{currentWeather.Main.AtmosphericPressure}hPa";
+            CurrentDate = $"{currentWeather.AnalysisDate.Day}/{currentWeather.AnalysisDate.Month}/{currentWeather.AnalysisDate.Year}";
+            DayName = $"{currentWeather.AnalysisDate.DayOfWeek}";
+            Trace.WriteLine($"icon: {currentWeather.Weather[0].Title} - {GetWeatherIcon(currentWeather.Weather[0].Title)}");
+            CurrentWeatherImage = GetWeatherIcon(currentWeather.Weather[0].Title);
+        }
+        public async void GetForecastToday(string favCities)
+        {
+            try
+            {
+                List<WeatherModel> forecastsForCity = await weatherClient.GetForecastAsync(favCities, 8, Measurement.Metric, Language.English);
                 foreach (var item in forecastsForCity)
                 {
                     item.Main.Temperature = (int)item.Main.Temperature;
@@ -282,9 +303,27 @@ namespace downpour.ViewModels
                 Trace.WriteLine($"get forecast error: {ex}");
             }
         }
-        public async void GetForecastNextDays(List<string> favCities)
+        public async void GetForecastToday(double[] latitudeAndLongitude)
         {
-            List<WeatherModel> forecastForDays = await weatherClient.GetForecastAsync(favCities[0], 60, Measurement.Metric, Language.English);
+            try
+            {
+                List<WeatherModel> forecastsForCity = await weatherClient.GetForecastAsync(latitudeAndLongitude[0], latitudeAndLongitude[1], 8, Measurement.Metric, Language.English);
+                foreach (var item in forecastsForCity)
+                {
+                    item.Main.Temperature = (int)item.Main.Temperature;
+                    IconPath = GetWeatherIcon(item.Weather[0].Title);
+                }
+
+                Forecast = forecastsForCity;
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine($"get forecast location error: {ex}");
+            }
+        }
+        public async void GetForecastNextDays(string favCities)
+        {
+            List<WeatherModel> forecastForDays = await weatherClient.GetForecastAsync(favCities, 60, Measurement.Metric, Language.English);
             List<WeatherModel> forecastForNextDays = new List<WeatherModel>();
             List<WeatherModel> forecastOnly15PM = new List<WeatherModel>();
             for (int i = 0; i < forecastForDays.Count - 1; i++)
@@ -304,6 +343,33 @@ namespace downpour.ViewModels
                     forecastForNextDays.Add(forecastOnly15PM[i]);
                 }
                 
+            }
+
+            ForecastNextDays = forecastForNextDays;
+
+        }
+        public async void GetForecastNextDays(double[] latitudeAndLongitude)
+        {
+            List<WeatherModel> forecastForDays = await weatherClient.GetForecastAsync(latitudeAndLongitude[0], latitudeAndLongitude[1], 60, Measurement.Metric, Language.English);
+            List<WeatherModel> forecastForNextDays = new List<WeatherModel>();
+            List<WeatherModel> forecastOnly15PM = new List<WeatherModel>();
+            for (int i = 0; i < forecastForDays.Count - 1; i++)
+            {
+                TimeSpan time = new TimeSpan(15, 00, 00);
+                if (forecastForDays[i].AnalysisDate.TimeOfDay == time)
+                {
+                    forecastOnly15PM.Add(forecastForDays[i]);
+                }
+            }
+            for (int i = 0; i < forecastOnly15PM.Count - 1; i++)
+            {
+                int day = forecastOnly15PM[i].AnalysisDate.Day;
+                if (day != forecastOnly15PM[i + 1].AnalysisDate.Day)
+                {
+                    forecastOnly15PM[i].Main.Temperature = (int)forecastOnly15PM[i].Main.Temperature;
+                    forecastForNextDays.Add(forecastOnly15PM[i]);
+                }
+
             }
 
             ForecastNextDays = forecastForNextDays;
@@ -334,6 +400,7 @@ namespace downpour.ViewModels
             
         }
 
+        
 
 
 
