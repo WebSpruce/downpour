@@ -33,8 +33,9 @@ namespace downpour.ViewModels
         private void AddCityToList()
         {
             MainViewModel.instance.favoriteCities.Add(EntryCity);
-            Trace.WriteLine($"fav item: {MainViewModel.instance.favoriteCities[0]}");
-            MainViewModel.instance.WeatherAPIConnection(MainViewModel.instance.favoriteCities);
+            MainViewModel.instance.GetCurrentWeather(MainViewModel.instance.favoriteCities);
+            MainViewModel.instance.GetForecastToday(MainViewModel.instance.favoriteCities);
+            MainViewModel.instance.GetForecastNextDays(MainViewModel.instance.favoriteCities);
             AddCity.instance.Close();
         }
 

@@ -8,33 +8,67 @@
             <Label Text="{Binding CurrentCityName}" FontSize="30" FontFamily="LiteOn" HorizontalOptions="Center"></Label>
         </StackLayout>
         <StackLayout Grid.Column="0" Grid.Row="1" HorizontalOptions="Start">
-            <Label Text="{Binding CurrentTemperature}" FontSize="290" FontFamily="LiteOnBlack"></Label>
-            <Label Text="°" FontSize="170" FontFamily="LiteOnBlack" HorizontalOptions="End" Margin="0,-270,-30,50"></Label>
+            <Label Text="{Binding CurrentTemperature}" FontSize="260" FontFamily="LiteOnBlack"></Label>
+            <Label Text="°" FontSize="150" FontFamily="LiteOnBlack" HorizontalOptions="End" Margin="0,-270,-30,90"></Label>
+            <StackLayout Orientation="Horizontal">
+                <Label Text="{Binding MinTemperature, StringFormat='Min:{0:0}°, '}" FontSize="20" FontFamily="LiteOnMedium"></Label>
+                <Label Text="{Binding MaxTemperature, StringFormat='Max:{0:0}°'}" FontSize="20" FontFamily="LiteOnMedium"></Label>
+            </StackLayout>
             <Label Text="{Binding Humidity}" FontSize="17" FontFamily="LiteOn"></Label>
             <Label Text="{Binding Wind}" FontSize="17" FontFamily="LiteOn"></Label>
             <Label Text="{Binding HPA}" FontSize="17" FontFamily="LiteOn"></Label>
         </StackLayout>
         <StackLayout Grid.Column="1" Grid.Row="1" Margin="0,80,0,0">
-            <Image Source="Resources/Images/weather_icons/sun.png" WidthRequest="100" Aspect="Fill" HorizontalOptions="Center"></Image>
+            <!--<Image Source="{Binding CurrentWeatherImage}" WidthRequest="100" Aspect="Fill" HorizontalOptions="Center"></Image>-->
             <Label Text="{Binding CurrentDate}" FontSize="23" FontFamily="LiteOnMedium" HorizontalOptions="Center" Margin="0,20,0,0"></Label>
             <Label Text="{Binding DayName}" FontSize="23" FontFamily="LiteOnMedium" HorizontalOptions="Center"></Label>
         </StackLayout>
-        
-        <!--<StackLayout Grid.ColumnSpan="2" Grid.Row="2" Padding="5">
+
+        <StackLayout Grid.ColumnSpan="2" Grid.Row="2" Padding="5">
             <Label Text="Forecast for today" FontSize="20" FontFamily="LiteOnMedium" Margin="0,10,0,0"></Label>
             <Frame Padding="5">
                 <ScrollView Orientation="Horizontal" HeightRequest="110">
-
+                    <StackLayout>
+                        <CollectionView ItemsSource="{Binding Forecast}">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout Orientation="Horizontal" ItemSpacing="10"></LinearItemsLayout>
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                                        <Label Text="{Binding AnalysisDate.TimeOfDay,StringFormat='{0:hh:mm tt}'}" FontSize="20" FontFamily="LiteOn" HorizontalTextAlignment="Center"></Label>
+                                        <Label Text="{Binding Main.Temperature}" FontSize="40" FontFamily="LiteOn" HorizontalTextAlignment="Center"></Label>
+                                        
+                                    </StackLayout>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </StackLayout>
                 </ScrollView>
             </Frame>
-            
+
             <Label Text="Forecast for next days" FontSize="20" FontFamily="LiteOnMedium" Margin="0,10,0,0"></Label>
             <Frame Padding="5">
                 <ScrollView Orientation="Horizontal" HeightRequest="110">
+                    <StackLayout>
+                        <CollectionView ItemsSource="{Binding ForecastNextDays}">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout Orientation="Horizontal" ItemSpacing="10"></LinearItemsLayout>
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                                        <Label Text="{Binding AnalysisDate.Date,StringFormat='{0:dd MMM}'}" FontSize="20" FontFamily="LiteOn" HorizontalTextAlignment="Center"></Label>
+                                        <Label Text="{Binding Main.Temperature}" FontSize="40" FontFamily="LiteOn" HorizontalTextAlignment="Center"></Label>
 
+                                    </StackLayout>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </StackLayout>
                 </ScrollView>
             </Frame>
-        </StackLayout>-->
+        </StackLayout>
 
 
     </Grid>
