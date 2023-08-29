@@ -16,15 +16,15 @@
             <Label Text="{Binding CurrentTemperature}" FontSize="260" FontFamily="LiteOnBlack"></Label>
             <Label Text="°" FontSize="150" FontFamily="LiteOnBlack" HorizontalOptions="End" Margin="0,-270,-30,90"></Label>
             <StackLayout Orientation="Horizontal">
-                <Label Text="{Binding MinTemperature, StringFormat='Min:{0:0}°, '}" FontSize="20" FontFamily="LiteOnMedium"></Label>
+                <Label Text="{Binding MinTemperature, StringFormat='Min:{0:0}°,\\'}" FontSize="20" FontFamily="LiteOnMedium"></Label>
                 <Label Text="{Binding MaxTemperature, StringFormat='Max:{0:0}°'}" FontSize="20" FontFamily="LiteOnMedium"></Label>
             </StackLayout>
-            <Label Text="{Binding Humidity}" FontSize="17" FontFamily="LiteOn"></Label>
-            <Label Text="{Binding Wind}" FontSize="17" FontFamily="LiteOn"></Label>
-            <Label Text="{Binding HPA}" FontSize="17" FontFamily="LiteOn"></Label>
+            <Label Text="{Binding Humidity}" FontSize="17" FontFamily="LiteOn" Margin="0,3"></Label>
+            <Label Text="{Binding Wind}" FontSize="17" FontFamily="LiteOn" Margin="0,3"></Label>
+            <Label Text="{Binding HPA}" FontSize="17" FontFamily="LiteOn" Margin="0,3"></Label>
         </StackLayout>
         <StackLayout Grid.Column="1" Grid.Row="1" Margin="0,80,0,0">
-            <!--<Image Source="{Binding CurrentWeatherImage}" WidthRequest="100" Aspect="Fill" HorizontalOptions="Center"></Image>-->
+            <Image Source="{Binding CurrentWeatherImage}" WidthRequest="100" Aspect="Fill" HorizontalOptions="Center"></Image>
             <Label Text="{Binding CurrentDate}" FontSize="23" FontFamily="LiteOnMedium" HorizontalOptions="Center" Margin="0,20,0,0"></Label>
             <Label Text="{Binding DayName}" FontSize="23" FontFamily="LiteOnMedium" HorizontalOptions="Center"></Label>
         </StackLayout>
@@ -41,9 +41,9 @@
                             <CollectionView.ItemTemplate>
                                 <DataTemplate>
                                     <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
-                                        <Label Text="{Binding AnalysisDate.TimeOfDay,StringFormat='{0:hh:mm tt}'}" FontSize="20" FontFamily="LiteOn" HorizontalTextAlignment="Center"></Label>
-                                        <Label Text="{Binding Main.Temperature}" FontSize="40" FontFamily="LiteOn" HorizontalTextAlignment="Center"></Label>
-                                        
+                                        <Label Text="{Binding WeatherModel.AnalysisDate.TimeOfDay,StringFormat='{0:hh:mm tt}'}" FontSize="20" FontFamily="LiteOn" HorizontalTextAlignment="Center" Padding="0,10"></Label>
+                                        <Image Source="{Binding WeatherIconPath}" WidthRequest="30" Aspect="Fill" HorizontalOptions="Center" VerticalOptions="Center"></Image>
+                                        <Label Text="{Binding WeatherModel.Main.Temperature}" FontSize="40" FontFamily="LiteOnMedium" HorizontalTextAlignment="Center"></Label>
                                     </StackLayout>
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>
@@ -63,9 +63,9 @@
                             <CollectionView.ItemTemplate>
                                 <DataTemplate>
                                     <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
-                                        <Label Text="{Binding AnalysisDate.Date,StringFormat='{0:dd MMM}'}" FontSize="20" FontFamily="LiteOn" HorizontalTextAlignment="Center"></Label>
-                                        <Label Text="{Binding Main.Temperature}" FontSize="40" FontFamily="LiteOn" HorizontalTextAlignment="Center"></Label>
-
+                                        <Label Text="{Binding WeatherModel.AnalysisDate.Date,StringFormat='{0:dd MMM}'}" FontSize="20" FontFamily="LiteOn" HorizontalTextAlignment="Center" Padding="0,10"></Label>
+                                        <Image Source="{Binding WeatherIconPath}" WidthRequest="30" Aspect="Fill" HorizontalOptions="Center" VerticalOptions="Center"></Image>
+                                        <Label Text="{Binding WeatherModel.Main.Temperature}" FontSize="40" FontFamily="LiteOnMedium" HorizontalTextAlignment="Center"></Label>
                                     </StackLayout>
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>

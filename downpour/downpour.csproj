@@ -40,15 +40,17 @@
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
 		<MauiImage Update="Resources\Images\dotnet_bot.svg" BaseSize="168,208" />
-		<MauiImage Update="Resources\Images\sun.png">
-		  <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-		</MauiImage>
 
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
 
 		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiImage Remove="Resources\Images\location.png" />
+	  <MauiImage Remove="Resources\Images\plus.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -61,21 +63,7 @@
 	  <None Remove="Resources\Images\location.png" />
 	  <None Remove="Resources\Images\plus.png" />
 	  <None Remove="Resources\Images\sun.png" />
-	  <None Remove="Resources\Images\weather_icons\cloud.png" />
-	  <None Remove="Resources\Images\weather_icons\cloudy-day.png" />
-	  <None Remove="Resources\Images\weather_icons\cloudy-night.png" />
-	  <None Remove="Resources\Images\weather_icons\cloudy.png" />
-	  <None Remove="Resources\Images\weather_icons\cold.png" />
-	  <None Remove="Resources\Images\weather_icons\humidity.png" />
-	  <None Remove="Resources\Images\weather_icons\night.png" />
-	  <None Remove="Resources\Images\weather_icons\rain.png" />
-	  <None Remove="Resources\Images\weather_icons\rainy.png" />
-	  <None Remove="Resources\Images\weather_icons\snow.png" />
-	  <None Remove="Resources\Images\weather_icons\snowy.png" />
 	  <None Remove="Resources\Images\weather_icons\sun.png" />
-	  <None Remove="Resources\Images\weather_icons\thunder.png" />
-	  <None Remove="Resources\Images\weather_icons\umbrella.png" />
-	  <None Remove="Resources\Images\weather_icons\wind-vane.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -85,57 +73,87 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Resource Include="Resources\Images\weather_icons\cloud.png">
+	  <Content Include="Resources\Images\location.png">
 	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-	  </Resource>
-	  <Resource Include="Resources\Images\weather_icons\cloudy-day.png">
+	  </Content>
+	  <Content Include="Resources\Images\plus.png">
 	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-	  </Resource>
-	  <Resource Include="Resources\Images\weather_icons\cloudy-night.png">
-	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-	  </Resource>
-	  <Resource Include="Resources\Images\weather_icons\cloudy.png">
-	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-	  </Resource>
-	  <Resource Include="Resources\Images\weather_icons\cold.png">
-	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-	  </Resource>
-	  <Resource Include="Resources\Images\weather_icons\humidity.png">
-	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-	  </Resource>
-	  <Resource Include="Resources\Images\weather_icons\night.png">
-	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-	  </Resource>
-	  <Resource Include="Resources\Images\weather_icons\rain.png">
-	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-	  </Resource>
-	  <Resource Include="Resources\Images\weather_icons\rainy.png">
-	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-	  </Resource>
-	  <Resource Include="Resources\Images\weather_icons\snow.png">
-	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-	  </Resource>
-	  <Resource Include="Resources\Images\weather_icons\snowy.png">
-	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-	  </Resource>
-	  <Resource Include="Resources\Images\weather_icons\sun.png">
-	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-	  </Resource>
-	  <Resource Include="Resources\Images\weather_icons\thunder.png">
-	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-	  </Resource>
-	  <Resource Include="Resources\Images\weather_icons\umbrella.png">
-	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-	  </Resource>
-	  <Resource Include="Resources\Images\weather_icons\wind-vane.png">
-	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-	  </Resource>
+	  </Content>
+	  <Content Include="Resources\Images\weather_icons\cloud.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Resources\Images\weather_icons\cloudy_day.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Resources\Images\weather_icons\cloudy_night.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Resources\Images\weather_icons\cloudy.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Resources\Images\weather_icons\cold.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Resources\Images\weather_icons\fog.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Resources\Images\weather_icons\humidity.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Resources\Images\weather_icons\night.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Resources\Images\weather_icons\rain.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Resources\Images\weather_icons\rainy.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Resources\Images\weather_icons\snow.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Resources\Images\weather_icons\snowy.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Resources\Images\weather_icons\sun.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Resources\Images\weather_icons\thunder.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Resources\Images\weather_icons\umbrella.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Resources\Images\weather_icons\wind_vane.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
 	</ItemGroup>
 
 	<ItemGroup>
 	  <MauiXaml Update="Popups\AddCity.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiImage Include="Resources\Images\weather_icons\cloud.png" />
+	  <MauiImage Include="Resources\Images\weather_icons\cloudy_day.png" />
+	  <MauiImage Include="Resources\Images\weather_icons\cloudy_night.png" />
+	  <MauiImage Include="Resources\Images\weather_icons\cloudy.png" />
+	  <MauiImage Include="Resources\Images\weather_icons\cold.png" />
+	  <MauiImage Include="Resources\Images\weather_icons\fog.png" />
+	  <MauiImage Include="Resources\Images\weather_icons\humidity.png" />
+	  <MauiImage Include="Resources\Images\weather_icons\night.png" />
+	  <MauiImage Include="Resources\Images\weather_icons\rain.png" />
+	  <MauiImage Include="Resources\Images\weather_icons\rainy.png" />
+	  <MauiImage Include="Resources\Images\weather_icons\snow.png" />
+	  <MauiImage Include="Resources\Images\weather_icons\snowy.png" />
+	  <MauiImage Include="Resources\Images\weather_icons\sun.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </MauiImage>
+	  <MauiImage Include="Resources\Images\weather_icons\thunder.png" />
+	  <MauiImage Include="Resources\Images\weather_icons\umbrella.png" />
+	  <MauiImage Include="Resources\Images\weather_icons\wind_vane.png" />
 	</ItemGroup>
 
 </Project>

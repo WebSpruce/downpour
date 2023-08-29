@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Maui.Views;
+using downpour.OtherClasses;
 using downpour.Popups;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -168,22 +169,22 @@ namespace downpour.ViewModels
                 }
             }
         }
-        private string iconPath;
-        public string IconPath
+        private string weatherIconPath;
+        public string WeatherIconPath
         {
-            get { return iconPath; }
+            get { return weatherIconPath; }
             set
             {
-                if (iconPath != value)
+                if (weatherIconPath != value)
                 {
-                    iconPath = value;
+                    weatherIconPath = value;
                     OnPropertyChanged();
                 }
             }
         }
 
-        private List<WeatherModel> forecast;
-        public List<WeatherModel> Forecast
+        private List<ForecastItem> forecast;
+        public List<ForecastItem> Forecast
         {
             get { return forecast; }
             set
@@ -195,8 +196,8 @@ namespace downpour.ViewModels
                 }
             }
         }
-        private List<WeatherModel> forecastNextDays;
-        public List<WeatherModel> ForecastNextDays
+        private List<ForecastItem> forecastNextDays;
+        public List<ForecastItem> ForecastNextDays
         {
             get { return forecastNextDays; }
             set
@@ -289,14 +290,16 @@ namespace downpour.ViewModels
         {
             try
             {
+                List<ForecastItem> forecastItems = new List<ForecastItem>();
                 List<WeatherModel> forecastsForCity = await weatherClient.GetForecastAsync(favCities, 8, Measurement.Metric, Language.English);
                 foreach (var item in forecastsForCity)
                 {
                     item.Main.Temperature = (int)item.Main.Temperature;
-                    IconPath = GetWeatherIcon(item.Weather[0].Title);
-                }
+                    forecastItems.Add(new ForecastItem { WeatherModel = item, WeatherIconPath = GetWeatherIcon(item.Weather[0].Title) });
 
-                Forecast = forecastsForCity;
+                }
+                Forecast = forecastItems;
+
             }
             catch (Exception ex)
             {
@@ -307,14 +310,14 @@ namespace downpour.ViewModels
         {
             try
             {
+                List<ForecastItem> forecastItems = new List<ForecastItem>();
                 List<WeatherModel> forecastsForCity = await weatherClient.GetForecastAsync(latitudeAndLongitude[0], latitudeAndLongitude[1], 8, Measurement.Metric, Language.English);
                 foreach (var item in forecastsForCity)
                 {
                     item.Main.Temperature = (int)item.Main.Temperature;
-                    IconPath = GetWeatherIcon(item.Weather[0].Title);
+                    forecastItems.Add(new ForecastItem { WeatherModel = item, WeatherIconPath = GetWeatherIcon(item.Weather[0].Title) });
                 }
-
-                Forecast = forecastsForCity;
+                Forecast = forecastItems;
             }
             catch (Exception ex)
             {
@@ -323,7 +326,9 @@ namespace downpour.ViewModels
         }
         public async void GetForecastNextDays(string favCities)
         {
-            List<WeatherModel> forecastForDays = await weatherClient.GetForecastAsync(favCities, 60, Measurement.Metric, Language.English);
+            List<ForecastItem> forecastItems = new List<ForecastItem>();
+
+            List<WeatherModel> forecastForDays = await weatherClient.GetForecastAsync(favCities, 100, Measurement.Metric, Language.English);
             List<WeatherModel> forecastForNextDays = new List<WeatherModel>();
             List<WeatherModel> forecastOnly15PM = new List<WeatherModel>();
             for (int i = 0; i < forecastForDays.Count - 1; i++)
@@ -344,13 +349,18 @@ namespace downpour.ViewModels
                 }
                 
             }
-
-            ForecastNextDays = forecastForNextDays;
+            foreach (var item in forecastForNextDays)
+            {
+                item.Main.Temperature = (int)item.Main.Temperature;
+                forecastItems.Add(new ForecastItem { WeatherModel = item, WeatherIconPath = GetWeatherIcon(item.Weather[0].Title) });
+            }
+            ForecastNextDays = forecastItems;
 
         }
         public async void GetForecastNextDays(double[] latitudeAndLongitude)
         {
-            List<WeatherModel> forecastForDays = await weatherClient.GetForecastAsync(latitudeAndLongitude[0], latitudeAndLongitude[1], 60, Measurement.Metric, Language.English);
+            List<ForecastItem> forecastItems = new List<ForecastItem>();
+            List<WeatherModel> forecastForDays = await weatherClient.GetForecastAsync(latitudeAndLongitude[0], latitudeAndLongitude[1], 100, Measurement.Metric, Language.English);
             List<WeatherModel> forecastForNextDays = new List<WeatherModel>();
             List<WeatherModel> forecastOnly15PM = new List<WeatherModel>();
             for (int i = 0; i < forecastForDays.Count - 1; i++)
@@ -369,10 +379,14 @@ namespace downpour.ViewModels
                     forecastOnly15PM[i].Main.Temperature = (int)forecastOnly15PM[i].Main.Temperature;
                     forecastForNextDays.Add(forecastOnly15PM[i]);
                 }
-
+            }
+            foreach (var item in forecastForNextDays)
+            {
+                item.Main.Temperature = (int)item.Main.Temperature;
+                forecastItems.Add(new ForecastItem { WeatherModel = item, WeatherIconPath = GetWeatherIcon(item.Weather[0].Title) });
             }
 
-            ForecastNextDays = forecastForNextDays;
+            ForecastNextDays = forecastItems;
 
         }
         private string GetWeatherIcon(string title)
@@ -380,8 +394,8 @@ namespace downpour.ViewModels
             string path = string.Empty;
             switch (title)
             {
-                case "Clear": { path = "Resources/Images/weather_icons/sun.png"; break; }
-                case "Clouds": { path = "Resources/Images/weather_icons/cloudy.png"; break; }
+                case "Clear": { path = "Resources/Images/sun.png"; break; }
+                case "Clouds": { path = "Resources/Images/cloudy.png"; break; }
                 case "Mist  ": 
                 case "Haze": 
                 case "Dust": 
@@ -390,11 +404,11 @@ namespace downpour.ViewModels
                 case "Tornado": 
                 case "Ash": 
                 case "Squall": 
-                case "Smoke": { path = "Resources/Images/weather_icons/fog.png"; break; }
-                case "Snow": { path = "Resources/Images/weather_icons/snow.png"; break; }
-                case "Rain": { path = "Resources/Images/weather_icons/rainy.png"; break; }
-                case "Drizzle": { path = "Resources/Images/weather_icons/rain.png"; break; }
-                case "Thunderstorm": { path = "Resources/Images/weather_icons/thunder.png"; break; }
+                case "Smoke": { path = "Resources/Images/fog.png"; break; }
+                case "Snow": { path = "Resources/Images/snow.png"; break; }
+                case "Rain": { path = "Resources/Images/rainy.png"; break; }
+                case "Drizzle": { path = "Resources/Images/rain.png"; break; }
+                case "Thunderstorm": { path = "Resources/Images/thunder.png"; break; }
             }
             return path;
             

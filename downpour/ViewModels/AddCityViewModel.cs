@@ -43,7 +43,7 @@ namespace downpour.ViewModels
         }
         private async void AddCityByLocation()
         {
-            var location = await Geolocation.GetLocationAsync();
+            var location = await Geolocation.Default.GetLocationAsync();
             string locationInformation = $"{location.Latitude};{location.Longitude}";
             if (!MainViewModel.instance.favoriteCities.Contains(locationInformation))
             {
