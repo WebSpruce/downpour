@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<com:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="downpour.Popups.CityChecker"
+             xmlns:com="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
+             xmlns:viewModels="clr-namespace:downpour.ViewModels"
+           xmlns:Android="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;assembly=Microsoft.Maui.Controls"
+           xmlns:Windows="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.WindowsSpecific;assembly=Microsoft.Maui.Controls"
+             Color="Transparent" CanBeDismissedByTappingOutsideOfPopup="False" Shell.NavBarIsVisible="False">
+    
+    <Frame CornerRadius="10" Padding="5" BorderColor="{StaticResource NewLight0}" HorizontalOptions="CenterAndExpand" WidthRequest="300" HeightRequest="300">
+        <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="StartAndExpand">
+            <Label Text="Swipe left to show weather of city/location." FontSize="15" FontFamily="LiteOn" VerticalOptions="Center" HorizontalOptions="Center"></Label>
+            <Label Text="Swipe right to remove city/location." FontSize="15" FontFamily="LiteOn" VerticalOptions="Center" HorizontalOptions="Center"></Label>
+            <CollectionView x:Name="cview" ItemsSource="{Binding Cities}" SelectedItem="{Binding SelectedCity}" SelectionMode="Single"
+                            HorizontalOptions="Center">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <ScrollView Orientation="Vertical">
+                            <SwipeView HeightRequest="70" Android:SwipeView.SwipeTransitionMode="Drag">
+                            <SwipeView.RightItems>
+                                <SwipeItems SwipeBehaviorOnInvoked="Close">
+                                    <SwipeItemView>
+                                        <Frame Background="#7289da" BorderColor="#7289da" WidthRequest="100" HeightRequest="70" CornerRadius="10" Padding="0" VerticalOptions="Center" HorizontalOptions="Center">
+                                            <Button Text="Remove" Clicked="Button_Clicked" Background="#7289da" BorderColor="Transparent" HorizontalOptions="Center" VerticalOptions="Center" FontSize="30" FontFamily="LiteOn"></Button>
+                                        </Frame>
+                                    </SwipeItemView>
+                                </SwipeItems>
+                            </SwipeView.RightItems>
+                            <SwipeView.LeftItems>
+                                <SwipeItems SwipeBehaviorOnInvoked="Close">
+                                    <SwipeItemView>
+                                        <Frame Background="#7289da" BorderColor="#7289da" WidthRequest="100" HeightRequest="70" CornerRadius="10" Padding="0" VerticalOptions="Center" HorizontalOptions="Center">
+                                            <Button Text="Show" Clicked="Button_Clicked_1" Background="#7289da" BorderColor="Transparent" FontSize="30" FontFamily="LiteOn"></Button>
+                                        </Frame>
+                                    </SwipeItemView>
+                                </SwipeItems>
+                                
+                            </SwipeView.LeftItems>
+                            <Grid ColumnDefinitions="30,*" Margin="0,5" HeightRequest="70">
+                                <Label Grid.Column="0" Text="{Binding Id}" FontSize="30" FontFamily="LiteOn" VerticalOptions="Center"></Label>
+                                <Label Grid.Column="1" Text="{Binding CityOrLocation}" FontSize="30" FontFamily="LiteOnMedium" VerticalOptions="Center"></Label>
+                                <!--<Grid.GestureRecognizers>
+                                <SwipeGestureRecognizer Command="{Binding SwippedCommand}"></SwipeGestureRecognizer>
+                            </Grid.GestureRecognizers>-->
+
+                            </Grid>
+                        </SwipeView>
+                        </ScrollView>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+    </Frame>
+</com:Popup>

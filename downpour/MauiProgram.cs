@@ -1,4 +1,7 @@
 ﻿using CommunityToolkit.Maui;
+using downpour.OtherClasses;
+using downpour.Popups;
+using downpour.ViewModels;
 using Microsoft.Extensions.Logging;
 
 namespace downpour;
@@ -22,9 +25,10 @@ public static class MauiProgram
 				fonts.AddFont("Liteon-Medium.otf", "LiteOnMedium");
 				fonts.AddFont("Liteon-Thin.otf", "LiteOnThin");
 			});
+        builder.Services.AddSingleton<database>();
 
 #if DEBUG
-		builder.Logging.AddDebug();
+        builder.Logging.AddDebug();
 #endif
 
 		return builder.Build();

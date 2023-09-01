@@ -1,9 +1,12 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using downpour.OtherClasses;
 using downpour.Popups;
 using Weather.NET.Models.WeatherModel;
+using static System.Net.WebRequestMethods;
 
 namespace downpour.ViewModels
 {
@@ -33,45 +36,75 @@ namespace downpour.ViewModels
             AddCityIconCommand = new Command(() => AddCityByLocation());
         }
 
-        private void AddCityToList()
+        private async void AddCityToList()
         {
-            if (!MainViewModel.instance.favoriteCities.Contains(EntryCity)){
-                MainViewModel.instance.favoriteCities.Add(EntryCity);
-            }
-            LoadWeather(MainViewModel.instance.favoriteCities);
-            AddCity.instance.Close();
-        }
-        private async void AddCityByLocation()
-        {
-            var location = await Geolocation.Default.GetLocationAsync();
-            string locationInformation = $"{location.Latitude};{location.Longitude}";
-            if (!MainViewModel.instance.favoriteCities.Contains(locationInformation))
+            try
             {
-                MainViewModel.instance.favoriteCities.Add(locationInformation);
-            }
-            LoadWeather(MainViewModel.instance.favoriteCities);
-            AddCity.instance.Close();
-        }
-        private void LoadWeather(List<string> favCities)
-        {
-            for(int i=0; i< favCities.Count; i++)
-            {
-                if (favCities[i].Contains(';'))
+                bool contains = false;
+                List<favouriteCities> fTemp = await App.Database.GetAllFavouriteCities();
+                foreach (var item in fTemp)
                 {
-                    double[] latitudeAndLongitude = Array.ConvertAll(favCities[i].Split(';'), Double.Parse);
-                    MainViewModel.instance.GetCurrentWeather(latitudeAndLongitude);
-                    MainViewModel.instance.GetForecastToday(latitudeAndLongitude);
-                    MainViewModel.instance.GetForecastNextDays(latitudeAndLongitude);
+                    if (item.CityOrLocation.Contains(EntryCity))
+                    {
+                        contains = true;
+                        break;
+                    }
+                }
+                if (!contains)
+                {
+                    await App.Database.SaveCityAsync(new favouriteCities { CityOrLocation = EntryCity });
+                    fTemp.Add(new favouriteCities { CityOrLocation = EntryCity });
+                    MainViewModel.instance.LoadWeather(fTemp.Find(x => x.CityOrLocation == EntryCity));
                 }
                 else
                 {
-                    MainViewModel.instance.GetCurrentWeather(favCities[i]);
-                    MainViewModel.instance.GetForecastToday(favCities[i]);
-                    MainViewModel.instance.GetForecastNextDays(favCities[i]);
+                    await MainPage.instance.DisplayAlert("Error", $"The city or location is already on your favourite list.", "Close Information");
                 }
-                
+
+                AddCity.instance.Close();
             }
-        }
+            catch(Exception ex)
+            {
+                Trace.WriteLine($"Add City To List error: {ex}");
+                await MainPage.instance.DisplayAlert("Error", $"Add City To List error.", "Close Information");
+            }
+}
+        private async void AddCityByLocation()
+        {
+            try
+            {
+                var location = await Geolocation.Default.GetLocationAsync();
+                string locationInformation = $"{location.Latitude};{location.Longitude}";
+
+                List<favouriteCities> fTemp = await App.Database.GetAllFavouriteCities();
+                bool contains = false;
+                foreach (var item in fTemp)
+                {
+                    if (item.CityOrLocation.Contains(locationInformation))
+                    {
+                        contains = true;
+                        break;
+                    }
+                }
+                if (!contains)
+                {
+                    await App.Database.SaveCityAsync(new favouriteCities { CityOrLocation = locationInformation });
+                    fTemp.Add(new favouriteCities { CityOrLocation = locationInformation });
+                    MainViewModel.instance.LoadWeather(fTemp.Find(x=>x.CityOrLocation == locationInformation));
+                }
+                else
+                {
+                    await MainPage.instance.DisplayAlert("Error", $"The city or location is already on your favourite list.", "Close Information");
+                }
+                AddCity.instance.Close();
+            }
+            catch(Exception ex)
+            {
+                Trace.WriteLine($"Add City by location error: {ex}");
+                await MainPage.instance.DisplayAlert("Error", $"Add City by location error.", "Close Information");
+            }
+}
+        
 
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -65,32 +65,6 @@ namespace downpour.ViewModels
                 }
             }
         }
-        private string currentFullDate;
-        public string CurrentFullDate
-        {
-            get { return currentFullDate; }
-            set
-            {
-                if (currentFullDate != value)
-                {
-                    currentFullDate = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-        private string currentDayName;
-        public string CurrentDayName
-        {
-            get { return currentDayName; }
-            set
-            {
-                if (currentDayName != value)
-                {
-                    currentDayName = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
         private string currentWeatherImage;
         public string CurrentWeatherImage
         {
@@ -169,31 +143,14 @@ namespace downpour.ViewModels
                 }
             }
         }
-        private string weatherIconPath;
-        public string WeatherIconPath
-        {
-            get { return weatherIconPath; }
-            set
-            {
-                if (weatherIconPath != value)
-                {
-                    weatherIconPath = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
         private List<ForecastItem> forecast;
         public List<ForecastItem> Forecast
         {
             get { return forecast; }
             set
             {
-                if (forecast != value)
-                {
-                    forecast = value;
-                    OnPropertyChanged();
-                }
+                forecast = value;
+                OnPropertyChanged();
             }
         }
         private List<ForecastItem> forecastNextDays;
@@ -202,39 +159,65 @@ namespace downpour.ViewModels
             get { return forecastNextDays; }
             set
             {
-                if (forecastNextDays != value)
-                {
-                    forecastNextDays = value;
-                    OnPropertyChanged();
-                }
+                forecastNextDays = value;
+                OnPropertyChanged();
             }
         }
 
-        public List<string> favoriteCities = new List<string>();
+        public List<favouriteCities> favoriteCities = new List<favouriteCities>();
 
         public ICommand AddCityIconCommand { get; private set; }
+        public ICommand ShowCitiesCommand { get; private set; }
+
+       
 
         public static MainViewModel instance;
         public MainViewModel()
         {
             instance = this;
-            AddCityIconCommand = new Command(()=> MainPage.instance.ShowPopup(new AddCity()));
+            AddCityIconCommand = new Command(ShowAddCityPopup);
+            ShowCitiesCommand = new Command(ShowSavedCitiesPopup);
             try
             {
                 WeatherAPIConnection();
-                Trace.WriteLine($"fav: {favoriteCities.Count}");
-                if (favoriteCities.Count < 1)
-                {
-                    MainPage.instance.ShowPopup(new AddCity());
-                }
+                getFavCities();
+                
             }
             catch(Exception ex)
             {
                 Trace.WriteLine($"connection and first city error: {ex}");
             }
         }
+        private async void ShowAddCityPopup()
+        {
+            await App.Current.MainPage.ShowPopupAsync(new AddCity());
+        }
+        private async void ShowSavedCitiesPopup()
+        {
+            await App.Current.MainPage.ShowPopupAsync(new CityChecker());
+        }
+        private async void getFavCities()
+        {
+            favoriteCities = await App.Database.GetAllFavouriteCities();
+
+            Trace.WriteLine($"fav count: {favoriteCities.Count}");
+            if (favoriteCities.Count < 1)
+            {
+                ShowAddCityPopup();
+            }
+            else
+            {
+                ShowSavedCitiesPopup();
+                //foreach (var item in favoriteCities)
+                //{
+                //    Trace.WriteLine($"item {item.Id}: {item.CityOrLocation}");
+                //}
+                //LoadWeather(favoriteCities);
+            }
+
+        }
         private WeatherClient weatherClient;
-        public async void WeatherAPIConnection()
+        public void WeatherAPIConnection()
         {
             try
             {
@@ -244,6 +227,35 @@ namespace downpour.ViewModels
             {
                 Trace.WriteLine($"API connection error: {ex}");
             }
+        }
+        public async void LoadWeather(favouriteCities favCities)
+        {
+            try
+            {
+
+                    if (favCities.CityOrLocation.Contains(';'))
+                    {
+                        double[] latitudeAndLongitude = Array.ConvertAll(favCities.CityOrLocation.Split(';'), Double.Parse);
+                        GetForecastNextDays(latitudeAndLongitude);
+                        GetForecastToday(latitudeAndLongitude);
+                        GetCurrentWeather(latitudeAndLongitude);
+                    }
+                    else
+                    {
+                        GetForecastNextDays(favCities.CityOrLocation);
+                        GetForecastToday(favCities.CityOrLocation);
+                        GetCurrentWeather(favCities.CityOrLocation);
+                    }
+
+                
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine($"Loading Weather error: {ex}");
+                await App.Database.DeleteCityAsync(favCities);
+                await MainPage.instance.DisplayAlert("Error", $"The location was not available.", "Close Information");
+            }
+
         }
         public async void GetCurrentWeather(string favCities)
         {
@@ -255,7 +267,7 @@ namespace downpour.ViewModels
             catch(Exception ex)
             {
                 Trace.WriteLine($"get current weather error: {ex}");
-                MainPage.instance.DisplayAlert("Error",$"Current Weather error.", "OK");
+                await MainPage.instance.DisplayAlert("Error",$"Current Weather error.", "Close Information");
             }
         }
         public async void GetCurrentWeather(double[] latitudeAndLongitude)
@@ -269,7 +281,7 @@ namespace downpour.ViewModels
             catch (Exception ex)
             {
                 Trace.WriteLine($"get current weather location error: {ex}");
-                MainPage.instance.DisplayAlert("Error", $"Current Weather location error.", "OK");
+                await MainPage.instance.DisplayAlert("Error", $"Current Weather error.", "Close Information");
             }
         }
         private void weatherInformation(WeatherModel currentWeather)
@@ -283,8 +295,8 @@ namespace downpour.ViewModels
             HPA = $"{currentWeather.Main.AtmosphericPressure}hPa";
             CurrentDate = $"{currentWeather.AnalysisDate.Day}/{currentWeather.AnalysisDate.Month}/{currentWeather.AnalysisDate.Year}";
             DayName = $"{currentWeather.AnalysisDate.DayOfWeek}";
-            Trace.WriteLine($"icon: {currentWeather.Weather[0].Title} - {GetWeatherIcon(currentWeather.Weather[0].Title)}");
             CurrentWeatherImage = GetWeatherIcon(currentWeather.Weather[0].Title);
+            
         }
         public async void GetForecastToday(string favCities)
         {
@@ -304,6 +316,7 @@ namespace downpour.ViewModels
             catch (Exception ex)
             {
                 Trace.WriteLine($"get forecast error: {ex}");
+                await MainPage.instance.DisplayAlert("Error", $"Today weather forecast error.", "Close Information");
             }
         }
         public async void GetForecastToday(double[] latitudeAndLongitude)
@@ -322,72 +335,89 @@ namespace downpour.ViewModels
             catch (Exception ex)
             {
                 Trace.WriteLine($"get forecast location error: {ex}");
+                await MainPage.instance.DisplayAlert("Error", $"Today weather forecast error.", "Close Information");
             }
         }
         public async void GetForecastNextDays(string favCities)
         {
-            List<ForecastItem> forecastItems = new List<ForecastItem>();
+            try
+            {
+                List<ForecastItem> forecastItems = new List<ForecastItem>();
 
-            List<WeatherModel> forecastForDays = await weatherClient.GetForecastAsync(favCities, 100, Measurement.Metric, Language.English);
-            List<WeatherModel> forecastForNextDays = new List<WeatherModel>();
-            List<WeatherModel> forecastOnly15PM = new List<WeatherModel>();
-            for (int i = 0; i < forecastForDays.Count - 1; i++)
-            {
-                TimeSpan time = new TimeSpan(15, 00, 00);
-                if (forecastForDays[i].AnalysisDate.TimeOfDay == time)
+                List<WeatherModel> forecastForDays = await weatherClient.GetForecastAsync(favCities, 100, Measurement.Metric, Language.English);
+                List<WeatherModel> forecastForNextDays = new List<WeatherModel>();
+                List<WeatherModel> forecastOnly15PM = new List<WeatherModel>();
+                for (int i = 0; i < forecastForDays.Count - 1; i++)
                 {
-                    forecastOnly15PM.Add(forecastForDays[i]);
+                    TimeSpan time = new TimeSpan(15, 00, 00);
+                    if (forecastForDays[i].AnalysisDate.TimeOfDay == time)
+                    {
+                        forecastOnly15PM.Add(forecastForDays[i]);
+                    }
                 }
-            }
-            for (int i=0; i< forecastOnly15PM.Count-1; i++)
-            {
-                int day = forecastOnly15PM[i].AnalysisDate.Day; 
-                if (day != forecastOnly15PM[i + 1].AnalysisDate.Day)
+                for (int i = 0; i < forecastOnly15PM.Count - 1; i++)
                 {
-                    forecastOnly15PM[i].Main.Temperature = (int)forecastOnly15PM[i].Main.Temperature;
-                    forecastForNextDays.Add(forecastOnly15PM[i]);
+                    int day = forecastOnly15PM[i].AnalysisDate.Day;
+                    if (day != forecastOnly15PM[i + 1].AnalysisDate.Day)
+                    {
+                        forecastOnly15PM[i].Main.Temperature = (int)forecastOnly15PM[i].Main.Temperature;
+                        forecastForNextDays.Add(forecastOnly15PM[i]);
+                    }
+
                 }
-                
+                foreach (var item in forecastForNextDays)
+                {
+                    item.Main.Temperature = (int)item.Main.Temperature;
+                    forecastItems.Add(new ForecastItem { WeatherModel = item, WeatherIconPath = GetWeatherIcon(item.Weather[0].Title) });
+                }
+                ForecastNextDays = forecastItems;
             }
-            foreach (var item in forecastForNextDays)
+            catch(Exception ex)
             {
-                item.Main.Temperature = (int)item.Main.Temperature;
-                forecastItems.Add(new ForecastItem { WeatherModel = item, WeatherIconPath = GetWeatherIcon(item.Weather[0].Title) });
+                Trace.WriteLine($"get forecast for next days error: {ex}");
+                await MainPage.instance.DisplayAlert("Error", $"Forecast for next days error.", "Close Information");
             }
-            ForecastNextDays = forecastItems;
+            
 
         }
         public async void GetForecastNextDays(double[] latitudeAndLongitude)
         {
-            List<ForecastItem> forecastItems = new List<ForecastItem>();
-            List<WeatherModel> forecastForDays = await weatherClient.GetForecastAsync(latitudeAndLongitude[0], latitudeAndLongitude[1], 100, Measurement.Metric, Language.English);
-            List<WeatherModel> forecastForNextDays = new List<WeatherModel>();
-            List<WeatherModel> forecastOnly15PM = new List<WeatherModel>();
-            for (int i = 0; i < forecastForDays.Count - 1; i++)
+            try
             {
-                TimeSpan time = new TimeSpan(15, 00, 00);
-                if (forecastForDays[i].AnalysisDate.TimeOfDay == time)
+                List<ForecastItem> forecastItems = new List<ForecastItem>();
+                List<WeatherModel> forecastForDays = await weatherClient.GetForecastAsync(latitudeAndLongitude[0], latitudeAndLongitude[1], 100, Measurement.Metric, Language.English);
+                List<WeatherModel> forecastForNextDays = new List<WeatherModel>();
+                List<WeatherModel> forecastOnly15PM = new List<WeatherModel>();
+                for (int i = 0; i < forecastForDays.Count - 1; i++)
                 {
-                    forecastOnly15PM.Add(forecastForDays[i]);
+                    TimeSpan time = new TimeSpan(15, 00, 00);
+                    if (forecastForDays[i].AnalysisDate.TimeOfDay == time)
+                    {
+                        forecastOnly15PM.Add(forecastForDays[i]);
+                    }
                 }
-            }
-            for (int i = 0; i < forecastOnly15PM.Count - 1; i++)
-            {
-                int day = forecastOnly15PM[i].AnalysisDate.Day;
-                if (day != forecastOnly15PM[i + 1].AnalysisDate.Day)
+                for (int i = 0; i < forecastOnly15PM.Count - 1; i++)
                 {
-                    forecastOnly15PM[i].Main.Temperature = (int)forecastOnly15PM[i].Main.Temperature;
-                    forecastForNextDays.Add(forecastOnly15PM[i]);
+                    int day = forecastOnly15PM[i].AnalysisDate.Day;
+                    if (day != forecastOnly15PM[i + 1].AnalysisDate.Day)
+                    {
+                        forecastOnly15PM[i].Main.Temperature = (int)forecastOnly15PM[i].Main.Temperature;
+                        forecastForNextDays.Add(forecastOnly15PM[i]);
+                    }
                 }
+                foreach (var item in forecastForNextDays)
+                {
+                    item.Main.Temperature = (int)item.Main.Temperature;
+                    forecastItems.Add(new ForecastItem { WeatherModel = item, WeatherIconPath = GetWeatherIcon(item.Weather[0].Title) });
+                }
+
+                ForecastNextDays = forecastItems;
             }
-            foreach (var item in forecastForNextDays)
+            catch(Exception ex)
             {
-                item.Main.Temperature = (int)item.Main.Temperature;
-                forecastItems.Add(new ForecastItem { WeatherModel = item, WeatherIconPath = GetWeatherIcon(item.Weather[0].Title) });
+                Trace.WriteLine($"get forecast for next days location error: {ex}");
+                await MainPage.instance.DisplayAlert("Error", $"Forecast for next days error.", "Close Information");
             }
-
-            ForecastNextDays = forecastItems;
-
         }
         private string GetWeatherIcon(string title)
         {

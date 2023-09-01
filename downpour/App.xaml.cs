@@ -1,8 +1,22 @@
-﻿namespace downpour;
+﻿using downpour.OtherClasses;
+
+namespace downpour;
 
 public partial class App : Application
 {
-	public App()
+    private static database database2;
+    public static database Database
+    {
+        get
+        {
+            if (database2 == null)
+            {
+                database2 = new database(Path.Combine(FileSystem.AppDataDirectory, "weatherFavouriteCities.db"));
+            }
+            return database2;
+        }
+    }
+    public App()
 	{
 		InitializeComponent();
 
