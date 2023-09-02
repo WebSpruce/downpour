@@ -11,7 +11,9 @@ Works on:
 
 ### if your device has a dark theme, the app will change colors
 
-## Screenshots:
-<img src="https://github.com/WebSpruce/downpour/assets/117351406/0b70e73f-aa15-43ed-88fc-b400ee90fb81" width=500>
-<img src="https://github.com/WebSpruce/downpour/assets/117351406/311699d4-93dd-41e8-ae34-7f7ef802c75c" width=500>
-<img src="https://github.com/WebSpruce/downpour/assets/117351406/a806082f-e33a-4b9b-93f7-d643f5bb492c" width=500>
+| ## Screenshots: |            |
+| ----------------| ---------- |
+| <img src="https://github.com/WebSpruce/downpour/assets/117351406/07bf70ed-7e30-44a0-b120-f44346711a3c" width=500> | <img src="https://github.com/WebSpruce/downpour/assets/117351406/3c2b1eb9-3858-4970-8977-07db9952b4e8" width=500> |
+| <img src="https://github.com/WebSpruce/downpour/assets/117351406/c65ab67d-3780-4ac0-84d4-ef625641c0ea" width=500> |
+
+
