@@ -22,7 +22,7 @@
                                 <SwipeItems SwipeBehaviorOnInvoked="Close">
                                     <SwipeItemView>
                                         <Frame Background="#7289da" BorderColor="#7289da" WidthRequest="100" HeightRequest="70" CornerRadius="10" Padding="0" VerticalOptions="Center" HorizontalOptions="Center">
-                                            <Button Text="Remove" Clicked="Button_Clicked" Background="#7289da" BorderColor="Transparent" HorizontalOptions="Center" VerticalOptions="Center" FontSize="30" FontFamily="LiteOn"></Button>
+                                            <Button Text="Remove" Clicked="Button_Delete" Background="#7289da" BorderColor="Transparent" HorizontalOptions="Center" VerticalOptions="Center" FontSize="25" FontFamily="LiteOn"></Button>
                                         </Frame>
                                     </SwipeItemView>
                                 </SwipeItems>
@@ -31,7 +31,7 @@
                                 <SwipeItems SwipeBehaviorOnInvoked="Close">
                                     <SwipeItemView>
                                         <Frame Background="#7289da" BorderColor="#7289da" WidthRequest="100" HeightRequest="70" CornerRadius="10" Padding="0" VerticalOptions="Center" HorizontalOptions="Center">
-                                            <Button Text="Show" Clicked="Button_Clicked_1" Background="#7289da" BorderColor="Transparent" FontSize="30" FontFamily="LiteOn"></Button>
+                                            <Button Text="Show" Clicked="Button_Show" Background="#7289da" BorderColor="Transparent" FontSize="25" FontFamily="LiteOn"></Button>
                                         </Frame>
                                     </SwipeItemView>
                                 </SwipeItems>
@@ -50,6 +50,7 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+            <ImageButton Source="Resources/Images/plus.png" Command="{Binding AddCityIconCommand}" WidthRequest="30" HeightRequest="30" Aspect="Fill" Margin="10"></ImageButton>
         </StackLayout>
     </Frame>
 </com:Popup>

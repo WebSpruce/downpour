@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using CommunityToolkit.Maui.Views;
 using downpour.OtherClasses;
 using downpour.Popups;
 using Weather.NET.Models.WeatherModel;
@@ -26,6 +27,7 @@ namespace downpour.ViewModels
         }
         public ICommand AddCityCommand { get; private set; }
         public ICommand AddCityIconCommand { get; private set; }
+        public ICommand ShowCitiesCommand { get; private set; }
 
         public static AddCityViewModel instance;
         public AddCityViewModel()
@@ -34,6 +36,7 @@ namespace downpour.ViewModels
 
             AddCityCommand = new Command(() => AddCityToList());
             AddCityIconCommand = new Command(() => AddCityByLocation());
+            ShowCitiesCommand = new Command(async () => { await App.Current.MainPage.ShowPopupAsync(new CityChecker()); AddCity.instance.Close(); });
         }
 
         private async void AddCityToList()

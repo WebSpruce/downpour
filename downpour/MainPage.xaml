@@ -7,11 +7,6 @@
         <StackLayout Orientation="Horizontal" Grid.ColumnSpan="2" Grid.Row="0" VerticalOptions="Center">
             <ImageButton Source="Resources/Images/plus.png" Command="{Binding AddCityIconCommand}" WidthRequest="30" HeightRequest="30" Aspect="Fill" Margin="10"></ImageButton>
             <ImageButton Source="Resources/Images/list.png" Command="{Binding ShowCitiesCommand}" WidthRequest="30" HeightRequest="30" Aspect="Fill" Margin="10"></ImageButton>
-            <!--<Image Source="Resources/Images/plus.png" WidthRequest="30" HeightRequest="30" Aspect="Fill" Margin="10">
-                            <Image.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding AddCityIconCommand}"></TapGestureRecognizer>
-                            </Image.GestureRecognizers>
-                        </Image>-->
             <Label Text="{Binding CurrentCityName}" FontSize="30" FontFamily="LiteOn" VerticalOptions="Center"></Label>
         </StackLayout>
         <StackLayout Grid.Column="0" Grid.Row="1" HorizontalOptions="Start">

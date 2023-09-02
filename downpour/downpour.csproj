@@ -32,10 +32,8 @@
 
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
 
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
@@ -69,6 +67,8 @@
 	  <None Remove="Resources\Images\plus.png" />
 	  <None Remove="Resources\Images\sun.png" />
 	  <None Remove="Resources\Images\weather_icons\sun.png" />
+	  <None Remove="Resources\Splash\splashscreen.svg" />
+	  <None Remove="Resources\Splash\weatherappintro.svg" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -137,6 +137,14 @@
 	  <MauiImage Include="Resources\Images\weather_icons\wind_vane.png">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </MauiImage>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiSplashScreen Include="Resources\Splash\splashscreen.svg" Color="#7289da" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" BaseSize="128,128" />
 	</ItemGroup>
 
 </Project>

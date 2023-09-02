@@ -208,11 +208,6 @@ namespace downpour.ViewModels
             else
             {
                 ShowSavedCitiesPopup();
-                //foreach (var item in favoriteCities)
-                //{
-                //    Trace.WriteLine($"item {item.Id}: {item.CityOrLocation}");
-                //}
-                //LoadWeather(favoriteCities);
             }
 
         }

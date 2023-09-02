@@ -1,5 +1,7 @@
-﻿using downpour.OtherClasses;
+﻿using CommunityToolkit.Maui.Views;
+using downpour.OtherClasses;
 using downpour.Popups;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
@@ -37,27 +39,32 @@ namespace downpour.ViewModels
         }
         public ICommand SelectedCommand { get; private set; }
         public ICommand SwippedCommand { get; private set; }
+        public ICommand AddCityIconCommand { get; private set; }
 
         public static CityCheckerViewModel instance;
         public CityCheckerViewModel() 
         {
             instance = this;
-            Cities = MainViewModel.instance.favoriteCities;
+            getCities();
 
             SelectedCommand = new Command(Selected);
             SwippedCommand = new Command(Swipped);
+            AddCityIconCommand = new Command(async () => { CityChecker.instance.Close();  await App.Current.MainPage.ShowPopupAsync(new AddCity());}) ;
+        }
+        public async void getCities()
+        {
+            Cities = await App.Database.GetAllFavouriteCities();
         }
         public void Selected()
         {
-            Trace.WriteLine($"selected city: {SelectedCity.CityOrLocation}");
             MainViewModel.instance.LoadWeather(SelectedCity);
             CityChecker.instance.Close();
         }
         public async void Swipped()
         {
-            Trace.WriteLine($"swipped city: {SelectedCity.CityOrLocation}");
             await App.Database.DeleteCityAsync(SelectedCity);
-            Cities = MainViewModel.instance.favoriteCities;
+            CityChecker.instance.Close();
+            await App.Current.MainPage.ShowPopupAsync(new AddCity());
         }
 
 

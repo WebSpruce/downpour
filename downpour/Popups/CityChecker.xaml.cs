@@ -15,12 +15,12 @@ public partial class CityChecker : Popup
 		BindingContext = new CityCheckerViewModel();
 	}
 
-    private async void Button_Clicked(object sender, EventArgs e)
+    private async void Button_Delete(object sender, EventArgs e)
     {
 		CityCheckerViewModel.instance.Swipped();
     }
 
-    private void Button_Clicked_1(object sender, EventArgs e)
+    private void Button_Show(object sender, EventArgs e)
     {
 		CityCheckerViewModel.instance.Selected();
     }
