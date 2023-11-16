@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <com:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="downpour.Popups.CityChecker"
-             xmlns:com="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
-             xmlns:viewModels="clr-namespace:downpour.ViewModels"
+           xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+           x:Class="downpour.Popups.CityChecker"
+           xmlns:com="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
+           xmlns:viewModels="clr-namespace:downpour.ViewModels"
            xmlns:Android="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;assembly=Microsoft.Maui.Controls"
            xmlns:Windows="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.WindowsSpecific;assembly=Microsoft.Maui.Controls"
-             Color="Transparent" CanBeDismissedByTappingOutsideOfPopup="False" Shell.NavBarIsVisible="False">
+           Color="Transparent" CanBeDismissedByTappingOutsideOfPopup="False" Shell.NavBarIsVisible="False">
     
     <Frame CornerRadius="10" Padding="5" BorderColor="{StaticResource NewLight0}" HorizontalOptions="CenterAndExpand" WidthRequest="300" HeightRequest="300">
         <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="StartAndExpand">
@@ -22,7 +22,7 @@
                                 <SwipeItems SwipeBehaviorOnInvoked="Close">
                                     <SwipeItemView>
                                         <Frame Background="#7289da" BorderColor="#7289da" WidthRequest="100" HeightRequest="70" CornerRadius="10" Padding="0" VerticalOptions="Center" HorizontalOptions="Center">
-                                            <Button Text="Remove" Clicked="Button_Delete" Background="#7289da" BorderColor="Transparent" HorizontalOptions="Center" VerticalOptions="Center" FontSize="25" FontFamily="LiteOn"></Button>
+                                            <Button Text="Remove" Clicked="Button_Delete" Background="#7289da" BorderColor="Transparent" HorizontalOptions="Center" VerticalOptions="Center" FontSize="20" FontFamily="LiteOn"></Button>
                                         </Frame>
                                     </SwipeItemView>
                                 </SwipeItems>
@@ -31,19 +31,14 @@
                                 <SwipeItems SwipeBehaviorOnInvoked="Close">
                                     <SwipeItemView>
                                         <Frame Background="#7289da" BorderColor="#7289da" WidthRequest="100" HeightRequest="70" CornerRadius="10" Padding="0" VerticalOptions="Center" HorizontalOptions="Center">
-                                            <Button Text="Show" Clicked="Button_Show" Background="#7289da" BorderColor="Transparent" FontSize="25" FontFamily="LiteOn"></Button>
+                                            <Button Text="Show" Clicked="Button_Show" Background="#7289da" BorderColor="Transparent" FontSize="20" FontFamily="LiteOn"></Button>
                                         </Frame>
                                     </SwipeItemView>
                                 </SwipeItems>
-                                
                             </SwipeView.LeftItems>
                             <Grid ColumnDefinitions="30,*" Margin="0,5" HeightRequest="70">
                                 <Label Grid.Column="0" Text="{Binding Id}" FontSize="30" FontFamily="LiteOn" VerticalOptions="Center"></Label>
                                 <Label Grid.Column="1" Text="{Binding CityOrLocation}" FontSize="30" FontFamily="LiteOnMedium" VerticalOptions="Center"></Label>
-                                <!--<Grid.GestureRecognizers>
-                                <SwipeGestureRecognizer Command="{Binding SwippedCommand}"></SwipeGestureRecognizer>
-                            </Grid.GestureRecognizers>-->
-
                             </Grid>
                         </SwipeView>
                         </ScrollView>

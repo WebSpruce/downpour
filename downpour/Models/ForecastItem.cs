@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using Weather.NET.Models.WeatherModel;
 
-namespace downpour.OtherClasses
+namespace downpour.Models
 {
     public class ForecastItem: INotifyPropertyChanged
     {

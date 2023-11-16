@@ -1,7 +1,5 @@
 using CommunityToolkit.Maui.Views;
-using downpour.OtherClasses;
 using downpour.ViewModels;
-using System.Diagnostics;
 
 namespace downpour.Popups;
 

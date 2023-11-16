@@ -1,13 +1,10 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using CommunityToolkit.Maui.Views;
-using downpour.OtherClasses;
+using downpour.Models;
 using downpour.Popups;
-using Weather.NET.Models.WeatherModel;
-using static System.Net.WebRequestMethods;
 
 namespace downpour.ViewModels
 {
@@ -63,7 +60,6 @@ namespace downpour.ViewModels
                 {
                     await MainPage.instance.DisplayAlert("Error", $"The city or location is already on your favourite list.", "Close Information");
                 }
-
                 AddCity.instance.Close();
             }
             catch(Exception ex)
@@ -71,7 +67,7 @@ namespace downpour.ViewModels
                 Trace.WriteLine($"Add City To List error: {ex}");
                 await MainPage.instance.DisplayAlert("Error", $"Add City To List error.", "Close Information");
             }
-}
+        }
         private async void AddCityByLocation()
         {
             try
@@ -106,9 +102,7 @@ namespace downpour.ViewModels
                 Trace.WriteLine($"Add City by location error: {ex}");
                 await MainPage.instance.DisplayAlert("Error", $"Add City by location error.", "Close Information");
             }
-}
-        
-
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string name = "")

@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Maui.Views;
-using downpour.OtherClasses;
+using downpour.Models;
 using downpour.Popups;
+using SQLite;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
@@ -168,6 +169,7 @@ namespace downpour.ViewModels
 
         public ICommand AddCityIconCommand { get; private set; }
         public ICommand ShowCitiesCommand { get; private set; }
+        public ICommand ThemeSwitcherCommand { get; private set; }
 
        
 
@@ -177,46 +179,63 @@ namespace downpour.ViewModels
             instance = this;
             AddCityIconCommand = new Command(ShowAddCityPopup);
             ShowCitiesCommand = new Command(ShowSavedCitiesPopup);
+            ThemeSwitcherCommand = new Command(ThemeSwitcher);
             try
             {
                 WeatherAPIConnection();
-                getFavCities();
-                
+                GetFavCities();
             }
             catch(Exception ex)
             {
-                Trace.WriteLine($"connection and first city error: {ex}");
+                Trace.WriteLine($"connection and first city/location error: {ex}");
             }
         }
         private async void ShowAddCityPopup()
         {
-            await App.Current.MainPage.ShowPopupAsync(new AddCity());
+            try
+            {
+                await App.Current.MainPage.ShowPopupAsync(new AddCity());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ShowAddCityPopup error: {ex.Message}");
+            }
         }
         private async void ShowSavedCitiesPopup()
         {
-            await App.Current.MainPage.ShowPopupAsync(new CityChecker());
+            await Shell.Current.CurrentPage.ShowPopupAsync(new CityChecker());
         }
-        private async void getFavCities()
+        private async void GetFavCities()
         {
-            favoriteCities = await App.Database.GetAllFavouriteCities();
-
-            Trace.WriteLine($"fav count: {favoriteCities.Count}");
-            if (favoriteCities.Count < 1)
+            var isTableExists = await App.Database.CheckIfTableIsCreated();
+            if (!string.IsNullOrEmpty(isTableExists))
             {
-                ShowAddCityPopup();
+                favoriteCities = await App.Database.GetAllFavouriteCities();
+
+                if (favoriteCities.Count < 1)
+                {
+                    ShowAddCityPopup();
+                }
+                else
+                {
+                    ShowSavedCitiesPopup();
+                }
             }
             else
             {
-                ShowSavedCitiesPopup();
+                CreateTableResult createTableResult = await App.Database.CreateTable();
+                if (createTableResult != CreateTableResult.Created || createTableResult != CreateTableResult.Migrated)
+                {
+                    await Shell.Current.CurrentPage.DisplayAlert("Error", "The table didn't find. There is a problem for create table.", "Close");
+                }
             }
-
         }
         private WeatherClient weatherClient;
         public void WeatherAPIConnection()
         {
             try
             {
-                weatherClient = new WeatherClient("d7475cfcb03771e74f09ee5319181305");
+                weatherClient = new WeatherClient("c1cb5784ad395069a8ba0aa529407f60");
             }
             catch(Exception ex)
             {
@@ -227,22 +246,19 @@ namespace downpour.ViewModels
         {
             try
             {
-
-                    if (favCities.CityOrLocation.Contains(';'))
-                    {
-                        double[] latitudeAndLongitude = Array.ConvertAll(favCities.CityOrLocation.Split(';'), Double.Parse);
-                        GetForecastNextDays(latitudeAndLongitude);
-                        GetForecastToday(latitudeAndLongitude);
-                        GetCurrentWeather(latitudeAndLongitude);
-                    }
-                    else
-                    {
-                        GetForecastNextDays(favCities.CityOrLocation);
-                        GetForecastToday(favCities.CityOrLocation);
-                        GetCurrentWeather(favCities.CityOrLocation);
-                    }
-
-                
+                if (favCities.CityOrLocation.Contains(';'))
+                {
+                    double[] latitudeAndLongitude = Array.ConvertAll(favCities.CityOrLocation.Split(';'), Double.Parse);
+                    GetForecastNextDays(latitudeAndLongitude);
+                    GetForecastToday(latitudeAndLongitude);
+                    GetCurrentWeather(latitudeAndLongitude);
+                }
+                else
+                {
+                    GetForecastNextDays(favCities.CityOrLocation);
+                    GetForecastToday(favCities.CityOrLocation);
+                    GetCurrentWeather(favCities.CityOrLocation);
+                }
             }
             catch (Exception ex)
             {
@@ -250,7 +266,6 @@ namespace downpour.ViewModels
                 await App.Database.DeleteCityAsync(favCities);
                 await MainPage.instance.DisplayAlert("Error", $"The location was not available.", "Close Information");
             }
-
         }
         public async void GetCurrentWeather(string favCities)
         {
@@ -269,7 +284,6 @@ namespace downpour.ViewModels
         {
             try
             {
-                Trace.WriteLine($"location: {latitudeAndLongitude[0]} - {latitudeAndLongitude[1]}");
                 WeatherModel currentWeather = await weatherClient.GetCurrentWeatherAsync(latitudeAndLongitude[0], latitudeAndLongitude[1], Measurement.Metric);
                 weatherInformation(currentWeather);
             }
@@ -291,7 +305,6 @@ namespace downpour.ViewModels
             CurrentDate = $"{currentWeather.AnalysisDate.Day}/{currentWeather.AnalysisDate.Month}/{currentWeather.AnalysisDate.Year}";
             DayName = $"{currentWeather.AnalysisDate.DayOfWeek}";
             CurrentWeatherImage = GetWeatherIcon(currentWeather.Weather[0].Title);
-            
         }
         public async void GetForecastToday(string favCities)
         {
@@ -303,10 +316,8 @@ namespace downpour.ViewModels
                 {
                     item.Main.Temperature = (int)item.Main.Temperature;
                     forecastItems.Add(new ForecastItem { WeatherModel = item, WeatherIconPath = GetWeatherIcon(item.Weather[0].Title) });
-
                 }
                 Forecast = forecastItems;
-
             }
             catch (Exception ex)
             {
@@ -338,7 +349,6 @@ namespace downpour.ViewModels
             try
             {
                 List<ForecastItem> forecastItems = new List<ForecastItem>();
-
                 List<WeatherModel> forecastForDays = await weatherClient.GetForecastAsync(favCities, 100, Measurement.Metric, Language.English);
                 List<WeatherModel> forecastForNextDays = new List<WeatherModel>();
                 List<WeatherModel> forecastOnly15PM = new List<WeatherModel>();
@@ -358,7 +368,6 @@ namespace downpour.ViewModels
                         forecastOnly15PM[i].Main.Temperature = (int)forecastOnly15PM[i].Main.Temperature;
                         forecastForNextDays.Add(forecastOnly15PM[i]);
                     }
-
                 }
                 foreach (var item in forecastForNextDays)
                 {
@@ -372,8 +381,6 @@ namespace downpour.ViewModels
                 Trace.WriteLine($"get forecast for next days error: {ex}");
                 await MainPage.instance.DisplayAlert("Error", $"Forecast for next days error.", "Close Information");
             }
-            
-
         }
         public async void GetForecastNextDays(double[] latitudeAndLongitude)
         {
@@ -405,7 +412,6 @@ namespace downpour.ViewModels
                     item.Main.Temperature = (int)item.Main.Temperature;
                     forecastItems.Add(new ForecastItem { WeatherModel = item, WeatherIconPath = GetWeatherIcon(item.Weather[0].Title) });
                 }
-
                 ForecastNextDays = forecastItems;
             }
             catch(Exception ex)
@@ -439,9 +445,17 @@ namespace downpour.ViewModels
             
         }
 
-        
-
-
+        private void ThemeSwitcher()
+        {
+            if(App.Current.UserAppTheme == AppTheme.Light)
+            {
+                App.Current.UserAppTheme = AppTheme.Dark;
+            }
+            else
+            {
+                App.Current.UserAppTheme = AppTheme.Light;
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string name = "")

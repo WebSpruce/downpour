@@ -1,9 +1,7 @@
 ﻿using CommunityToolkit.Maui.Views;
-using downpour.OtherClasses;
+using downpour.Models;
 using downpour.Popups;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
@@ -45,13 +43,13 @@ namespace downpour.ViewModels
         public CityCheckerViewModel() 
         {
             instance = this;
-            getCities();
+            GetCities();
 
             SelectedCommand = new Command(Selected);
             SwippedCommand = new Command(Swipped);
             AddCityIconCommand = new Command(async () => { CityChecker.instance.Close();  await App.Current.MainPage.ShowPopupAsync(new AddCity());}) ;
         }
-        public async void getCities()
+        public async void GetCities()
         {
             Cities = await App.Database.GetAllFavouriteCities();
         }
@@ -66,8 +64,6 @@ namespace downpour.ViewModels
             CityChecker.instance.Close();
             await App.Current.MainPage.ShowPopupAsync(new AddCity());
         }
-
-
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string name = "")

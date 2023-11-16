@@ -9,8 +9,6 @@
             <Button Text="ADD CITY" Command="{Binding AddCityCommand}" FontSize="20" FontFamily="LiteOnBold"></Button>
             <ImageButton Source="Resources/Images/location.png" Command="{Binding AddCityIconCommand}" WidthRequest="30" HeightRequest="30" Aspect="Fill" HorizontalOptions="Center" Margin="0,10,0,0"></ImageButton>
             <ImageButton Source="Resources/Images/list.png" Command="{Binding ShowCitiesCommand}" WidthRequest="30" HeightRequest="30" Aspect="Fill" Margin="10"></ImageButton>
-
         </StackLayout>
     </Frame>
-    
 </com:Popup>
