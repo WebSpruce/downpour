@@ -8,6 +8,8 @@
 - Remove cities that you don't want to see
 - You are able to change the theme manually
 
+***Requires OpenWeather API Key.***
+  
 |   |   |
 | ----------------| ---------- |
 | <img src="https://github.com/WebSpruce/downpour/assets/117351406/e4ca7542-0fb9-4ba3-a569-45e42038904c" width=300> | <img src="https://github.com/WebSpruce/downpour/assets/117351406/0449fdfc-8c45-4bdc-bdc6-c678ad115ad4" width=300> |
