@@ -1,19 +1,16 @@
-# downpour - .NET MAUI Weather APP
+# downpour - .NET MAUI Weather APP with OpenWeatherAPI
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-v1.0.0-brightgreen.svg)](https://github.com/WebSpruce/mauiOperationsOnObjects/releases)
 
 ## Features
-- Works on: Android Devices
 - Add city or your current location to check weather
 - See forecast for next hours and days
 - Remove cities that you don't want to see
+- You are able to change the theme manually
 
-### if your device has a dark theme, the app will change colors
-
-| ## Screenshots: |            |
+|   |   |
 | ----------------| ---------- |
-| <img src="https://github.com/WebSpruce/downpour/assets/117351406/07bf70ed-7e30-44a0-b120-f44346711a3c" width=300> | <img src="https://github.com/WebSpruce/downpour/assets/117351406/3c2b1eb9-3858-4970-8977-07db9952b4e8" width=300> |
-| <img src="https://github.com/WebSpruce/downpour/assets/117351406/c65ab67d-3780-4ac0-84d4-ef625641c0ea" width=300> |
+| <img src="https://github.com/WebSpruce/downpour/assets/117351406/e4ca7542-0fb9-4ba3-a569-45e42038904c" width=300> | <img src="https://github.com/WebSpruce/downpour/assets/117351406/0449fdfc-8c45-4bdc-bdc6-c678ad115ad4" width=300> |
+| <img src="https://github.com/WebSpruce/downpour/assets/117351406/4c9bd450-6950-49f8-900c-7a52d5825d8c" width=300> | <img src="https://github.com/WebSpruce/downpour/assets/117351406/007a3cb9-f7e8-425e-91f8-76795a57c476" width=300> |
 
-
+### Tested on real Android device (Android 13, API 33) and Windows 10.0.19041.0
